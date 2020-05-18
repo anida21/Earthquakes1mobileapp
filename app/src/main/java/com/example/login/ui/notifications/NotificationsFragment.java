@@ -1,7 +1,5 @@
 package com.example.login.ui.notifications;
 
-import android.app.NotificationManager;
-import android.content.Context;
 import android.os.Bundle;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -18,16 +16,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-
 import com.example.login.R;
-
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,86 +45,86 @@ public class NotificationsFragment extends Fragment {
 
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_notifications);
-
-        quakeList = new ArrayList<>();
-        listView  = getActivity().findViewById(R.id.listview);
-
-        queue =  Volley.newRequestQueue(getActivity().getApplicationContext());
-
-        arrayList = new ArrayList<>();
-
-        getAllQuakes(Constants.URL);
 
     }
 
-    private void setContentView(int fragment_notifications) {
-    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_notifications, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_notifications, container, false);
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        listView=getActivity().findViewById(R.id.listview);
+        arrayList=new ArrayList<>();
+        queue =  Volley.newRequestQueue(getActivity().getApplicationContext());
+
+        getAllQuakes("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson");
+
+    }
+
 
 
     void getAllQuakes(String url) {
 
 
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                url, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Earthquake earthquake = new Earthquake();
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Earthquake earthquake = new Earthquake();
 
-                        try {
-                            JSONArray features = response.getJSONArray("features");
-                            for (int i = 0; i < Constants.LIMIT; i++) {
-                                JSONObject properties = features.getJSONObject(i).getJSONObject("properties");
-                                JSONObject geometry = features.getJSONObject(i).getJSONObject("geometry");
+                try {
+                    JSONArray features = response.getJSONArray("features");
+                    for (int i = 0; i < Constants.LIMIT; i++) {
+                        JSONObject properties = features.getJSONObject(i).getJSONObject("properties");
+                        JSONObject geometry = features.getJSONObject(i).getJSONObject("geometry");
 
-                                JSONArray coordinates = geometry.getJSONArray("coordinates");
+                        JSONArray coordinates = geometry.getJSONArray("coordinates");
 
-                                double lon = coordinates.getDouble(0);
-                                double lat = coordinates.getDouble(1);
+                        double lon = coordinates.getDouble(0);
+                        double lat = coordinates.getDouble(1);
 
-                                //Log.d("Quake", lon + ", " + lat);
-                                Log.d("Lat", properties.getString("place"));
+                        //Log.d("Quake", lon + ", " + lat);
+                        Log.d("Lat", properties.getString("place"));
 
-                                earthquake.setPlace(properties.getString("place"));
-                                earthquake.setType(properties.getString("type"));
-                                earthquake.setTime(properties.getLong("time"));
-                                earthquake.setMagnitude(properties.getDouble("mag"));
-                                earthquake.setLon(lon);
-                                earthquake.setLat(lat);
+                        earthquake.setPlace(properties.getString("place"));
+                        earthquake.setType(properties.getString("type"));
+                        earthquake.setTime(properties.getLong("time"));
+                        earthquake.setMagnitude(properties.getDouble("mag"));
+                        earthquake.setLon(lon);
+                        earthquake.setLat(lat);
 
-                                arrayList.add(earthquake.getPlace());
-
-                            }
-                            final ArrayAdapter adapter = new ArrayAdapter<String>(getActivity(),
-                                    android.R.layout.simple_list_item_1, arrayList);
-                            listView.setAdapter(arrayAdapter);
-                            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    //Toast.makeText(getApplicationContext(), "Clicked " + position, Toast.LENGTH_LONG).show();
-                                    Toast.makeText(getActivity(), "Clicked"+ position,Toast.LENGTH_LONG).show();
-                                }
-                            });
-                            arrayAdapter.notifyDataSetChanged();
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        arrayList.add(earthquake.getPlace());
 
                     }
-                }, new Response.ErrorListener() {
+
+                    final ArrayAdapter adapter = new ArrayAdapter<String>(getActivity(),
+                            android.R.layout.simple_list_item_1, arrayList);
+                    listView.setAdapter(adapter);
+                    /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            //Toast.makeText(getApplicationContext(), "Clicked " + position, Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "Clicked"+ position,Toast.LENGTH_LONG).show();
+
+                        }
+                    });*/
+                    adapter.notifyDataSetChanged();
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
             }
@@ -153,10 +147,6 @@ public class NotificationsFragment extends Fragment {
 
 
     /*private NotificationsViewModel notificationsViewModel;
-
-
-
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         notificationsViewModel =
@@ -170,11 +160,6 @@ public class NotificationsFragment extends Fragment {
             }
         });
         return root;*/
-
-
-
-
-
 
 
 

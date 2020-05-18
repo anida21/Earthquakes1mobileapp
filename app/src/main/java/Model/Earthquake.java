@@ -34,6 +34,7 @@ public class Earthquake {
         return magnitude;
     }
 
+
     public void setMagnitude(double magnitude) {
         this.magnitude = magnitude;
     }

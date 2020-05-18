@@ -51,6 +51,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback {
         // Required empty public constructor
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,7 +91,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback {
         /*googleMap.addMarker(new MarkerOptions().position(new LatLng(43.84864, 18.35644)).title("Sarajevo"));
         CameraPosition Sarajevo = CameraPosition.builder().target(new LatLng(43.84864, 18.35644)).zoom(10).bearing(0).tilt(45).build();
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(Sarajevo));*/
-        
+
     }
 
 
@@ -135,6 +136,8 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback {
 
 
                         Marker marker = mGoogleMap.addMarker(markerOptions);
+                       // Marker marker= mGoogleMap.addMarker(markerOptions.position(new LatLng(lat,lon)));
+
                         marker.setTag(earthquake.getDetailLink());
                         mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lon),1));
                     }
