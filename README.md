@@ -11,12 +11,14 @@ Naziv aplikacije: „InShock“ je mobilna aplikacija koja nakon izvršene regis
 Za rad koristi API koji daje podatke o trenutno najvećim zemljotresima i periodično osvježava bazu sa najnovijim informacijama. 
 Sama aplikacija vrši i lokacijski prikaz zemljotresa na mapi.
 
-Link: naknadno poslat
+
 
 Prerequisites
 
 Za pokretanje ove web stranice potreban je Android studio.
- Installing 
+
+
+Installing 
 Kroz nekoliko koraka opisan je način kako da instalirate aplikaciju 
 KORAK 1 – Download Earthquakes1mobileapp.zip 
 KORAK 2 – Earthquakes1mobileapp.zip 
